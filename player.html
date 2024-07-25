@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONY RM-MC33EL</title>
+    <style>
+        @font-face {
+            font-family: 'Digital';
+            src: url('font/digital.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Name';
+            src: url('font/name.ttf') format('truetype');
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+            overflow: hidden;
+        }
+        #mp3-player {
+            position: relative;
+            width: 64.83px;
+            height: 424.41px;
+            background-image: url('img/rc.jpg');
+            background-size: cover;
+            transform: translateY(-20%);
+        }
+        #screen-container {
+            position: absolute;
+            top: 32.5%;
+            left: 84%;
+            transform: translateX(-50%);
+            width: 19.7px;
+            height: 213.8px;
+        }
+        #screen {
+            width: 213.8px;
+            height: 19.7px;
+            background-color: #52F0E5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            transform: rotate(90deg);
+            transform-origin: top left;
+        }
+        #left-space {
+            width: 9.6px;
+        }
+        #track-number {
+            font-family: 'Digital', sans-serif;
+            font-size: 18px;
+            color: black;
+            margin-right: 9.6px;
+        }
+        #song-info-container {
+            width: 168px;
+            overflow: hidden;
+        }
+        #song-info {
+            font-family: 'Name', sans-serif;
+            font-size: 13px;
+            color: black;
+            white-space: nowrap;
+            display: inline-block;
+            position: relative;
+            top: -2px;
+            left: 0;
+        }
+        #right-space {
+            width: 5.6px;
+        }
+        #controls {
+            position: absolute;
+            bottom: -20%;
+            left: 48%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-evenly;
+            width: 500%;
+        }
+        #controls img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+        #content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            overflow: auto;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="mp3-player">
+        <div id="screen-container">
+            <div id="screen">
+                <div id="left-space"></div>
+                <span id="track-number">001</span>
+                <div id="song-info-container">
+                    <span id="song-info"></span>
+                </div>
+                <div id="right-space"></div>
+            </div>
+        </div>
+        <div id="controls">
+            <img src="img/back.jpg" id="back-button" alt="Back">
+            <img src="img/play.jpg" id="play-button" alt="Play">
+            <img src="img/forward.jpg" id="forward-button" alt="Forward">
+        </div>
+    </div>
+    <div id="content"></div>
+    <audio id="audio-player"></audio>
+    <audio id="click-sound" src="music/click.mp3" preload="auto"></audio>
+
+    <script>
+        const trackList = [
+            { number: "001", title: "아까워", artist: "재지팩트", file: "도현" },
+            { number: "002", title: "The&nbsp;&nbsp;&nbsp;&nbsp;One&nbsp;&nbsp;&nbsp;&nbsp;With&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;&nbsp;&nbsp;&nbsp;Wurlitzer", artist: "American&nbsp;&nbsp;&nbsp;&nbsp;Football", file: "진우" },
+            { number: "003", title: "CAT'S&nbsp;&nbsp;&nbsp;&nbsp;EYE", artist: "Anri", file: "세연" },
+            { number: "004", title: "Fuel", artist: "Metallica", file: "동근" },
+            { number: "005", title: "sunbeam", artist: "미노이", file: "민영" },
+            { number: "006", title: "Alright", artist: "Kendrick&nbsp;&nbsp;&nbsp;&nbsp;Lamar", file: "진영" },
+            { number: "007", title: "Doralice", artist: "Stan&nbsp;&nbsp;&nbsp;&nbsp;Getz,&nbsp;&nbsp;&nbsp;&nbsp;João&nbsp;&nbsp;&nbsp;&nbsp;Gilberto,&nbsp;&nbsp;&nbsp;&nbsp;Antônio&nbsp;&nbsp;&nbsp;&nbsp;Carlos&nbsp;&nbsp;&nbsp;&nbsp;Jobim", file: "재혁" },
+            { number: "008", title: "Audio", artist: "LSD", file: "민주" },
+            { number: "009", title: "Can't&nbsp;&nbsp;&nbsp;&nbsp;Catch&nbsp;&nbsp;&nbsp;&nbsp;Me&nbsp;&nbsp;&nbsp;&nbsp;Now", artist: "Olivia&nbsp;&nbsp;&nbsp;&nbsp;Rodrigo", file: "문정" },
+            { number: "010", title: "ゆめみちゃった", artist: "betcover!!", file: "종찬" },
+            { number: "011", title: "Gimme&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;&nbsp;&nbsp;&nbsp;Loot", artist: "The&nbsp;&nbsp;&nbsp;&nbsp;Notorious&nbsp;&nbsp;&nbsp;&nbsp;B.I.G.", file: "동건" },
+            { number: "012", title: "Generation&nbsp;&nbsp;&nbsp;&nbsp;Why", artist: "Conan&nbsp;&nbsp;&nbsp;&nbsp;Gray", file: "지민" },
+            { number: "013", title: "Cheerleader", artist: "Porter&nbsp;&nbsp;&nbsp;&nbsp;Robinson", file: "현호" },
+            { number: "014", title: "삐뽀삐뽀", artist: "김뜻돌", file: "재희" },
+            { number: "015", title: "Memories", artist: "Maroon&nbsp;&nbsp;&nbsp;&nbsp;5", file: "지원" },
+            { number: "016", title: "Wake&nbsp;&nbsp;&nbsp;&nbsp;Me&nbsp;&nbsp;&nbsp;&nbsp;Up", artist: "Avicii", file: "정민" },
+            { number: "017", title: "안녕", artist: "브로콜리너마저", file: "은영" },
+            { number: "018", title: "소나무숲의&nbsp;&nbsp;&nbsp;&nbsp;전설", artist: "놀이도감", file: "바다" },
+            { number: "019", title: "Love&nbsp;&nbsp;&nbsp;&nbsp;It&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;&nbsp;&nbsp;&nbsp;We&nbsp;&nbsp;&nbsp;&nbsp;Made&nbsp;&nbsp;&nbsp;&nbsp;It", artist: "The&nbsp;&nbsp;&nbsp;&nbsp;1975", file: "승주" },
+            { number: "020", title: "ウソツキ", artist: "ヨルシカ", file: "은재" }
+        ];
+
+        const personalPages = [
+            'hdh', 'kjw', 'osy', 'kdg', 'kmy', 'kjy', 'mjh', 'jmj', 'kmj', 'sjc', 'ldg',
+            'ljm', 'lhh', 'ljh', 'jjw', 'cjm', 'ley', 'hbd', 'bsj', 'lej'
+        ];
+
+        let currentTrack = 0;
+        let isPlaying = false;
+        let audioPlayer = document.getElementById('audio-player');
+        let playButton = document.getElementById('play-button');
+        let backButton = document.getElementById('back-button');
+        let forwardButton = document.getElementById('forward-button');
+        let trackNumber = document.getElementById('track-number');
+        let songInfo = document.getElementById('song-info');
+        let songInfoContainer = document.getElementById('song-info-container');
+        let screenContainer = document.getElementById('screen-container');
+
+        let animationFrame;
+        let position = 0;
+        let direction = -1;
+        let animationPaused = true;
+
+        function updateDisplay() {
+            let track = trackList[currentTrack];
+            trackNumber.textContent = track.number;
+            songInfo.innerHTML = `${track.title}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;${track.artist}`;
+            
+            position = 0;
+            songInfo.style.transform = `translateX(0px)`;
+            cancelAnimationFrame(animationFrame);
+            animationPaused = true;
+            
+            setTimeout(() => {
+                if (songInfo.offsetWidth > songInfoContainer.offsetWidth) {
+                    animationPaused = false;
+                    animate();
+                }
+            }, 500);
+        }
+
+        function playPause() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                playButton.src = 'img/play.jpg';
+            } else {
+                audioPlayer.play();
+                playButton.src = 'img/pause.jpg';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function loadTrack() {
+            let track = trackList[currentTrack];
+            audioPlayer.src = `music/${track.file}.mp3`;
+            audioPlayer.load();
+            updateDisplay();
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        function nextTrack() {
+            if (currentTrack < trackList.length - 1) {
+                currentTrack++;
+                loadTrack();
+            } else {
+                window.location.href = 'ipod.html';
+            }
+        }
+
+        function prevTrack() {
+            if (audioPlayer.currentTime > 5 || currentTrack === 0) {
+                audioPlayer.currentTime = 0;
+            } else {
+                currentTrack--;
+                loadTrack();
+            }
+        }
+
+        function animate() {
+            if (animationPaused) {
+                animationFrame = requestAnimationFrame(animate);
+                return;
+            }
+
+            position += direction * 0.6;
+            
+            const maxScroll = songInfo.offsetWidth - songInfoContainer.offsetWidth;
+            
+            if (position <= -maxScroll || position >= 0) {
+                direction = -direction;
+                position = Math.max(-maxScroll, Math.min(0, position));
+                animationPaused = true;
+                setTimeout(() => {
+                    animationPaused = false;
+                }, 1000);
+            }
+
+            songInfo.style.transform = `translateX(${position}px)`;
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        function goToPersonalPage() {
+            const page = personalPages[currentTrack];
+            const currentFile = trackList[currentTrack].file;
+            loadPersonalPage(page, currentFile);
+        }
+
+        function loadPersonalPage(page, currentFile) {
+            const content = document.getElementById('content');
+            fetch(`${page}.html`)
+                .then(response => response.text())
+                .then(html => {
+                    content.innerHTML = html;
+                    content.style.display = 'block';
+            
+            // 개인 페이지의 스크립트가 로드되고 실행될 시간을 줍니다.
+                    setTimeout(() => {
+                        const toggleButton = document.getElementById('toggleButton');
+                        if (toggleButton) {
+                    // 기존 이벤트 리스너를 제거하고 새로운 리스너를 추가합니다.
+                            toggleButton.removeEventListener('click', toggleButton.onclick);
+                            toggleButton.addEventListener('click', () => {
+                                toggleButton.src = `back/${currentFile}1.png`;
+                                setTimeout(() => {
+                                    toggleButton.src = `back/${currentFile}1.png`;
+                                    setTimeout(backToPlayer, 430);
+                                }, 100);
+                            });
+                        }
+                    }, 100);
+                });
+        }
+
+
+        function backToPlayer() {
+            document.getElementById('content').style.display = 'none';
+        }
+
+        function closePersonalPage() {
+            document.getElementById('content').style.display = 'none';
+    // 필요하다면 여기에 추가적인 정리 작업을 수행할 수 있습니다.
+        }
+
+        function playClickSound() {
+            const clickSound = document.getElementById('click-sound');
+            clickSound.currentTime = 0;  // 소리를 처음부터 재생
+            clickSound.play();
+        }
+
+        playButton.addEventListener('click', () => {
+            playClickSound();
+            playPause();
+        });
+
+        backButton.addEventListener('click', () => {
+            playClickSound();
+            prevTrack();
+        });
+
+        forwardButton.addEventListener('click', () => {
+            playClickSound();
+            nextTrack();
+        });
+        screenContainer.addEventListener('click', goToPersonalPage);
+
+        // Initial load
+        updateDisplay();
+        loadTrack();
+        animate();
+    </script>
+</body>
+</html>

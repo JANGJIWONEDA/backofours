@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONY HF-S 90</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            overflow: hidden;
+        }
+        .main-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .cassette-container {
+            width: 180px;
+            height: 120px;
+            position: relative;
+            cursor: pointer;
+        }
+        .cassette {
+            width: 100%;
+            height: 100%;
+            background: url('img/ha.png') no-repeat center center;
+            background-size: contain;
+            position: relative;
+        }
+        .reel {
+            position: absolute;
+            width: 39px;
+            height: 39px;
+            background: url('img/haha.png') no-repeat center center;
+            background-size: contain;
+            top: 36px;
+            animation: spin 3s linear infinite;
+        }
+        .reel.left {
+            left: 33.5px;
+        }
+        .reel.right {
+            right: 32px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .glitch__layers {
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: none;
+        }
+        .glitch__layer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-image: url('img/ha.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        .glitch__layer:nth-child(1) {
+            transform: translateX(-5%);
+            animation: glitch-anim-1 0.7s infinite linear alternate;
+        }
+        .glitch__layer:nth-child(2) {
+            transform: translateX(3%) translateY(3%);
+            animation: glitch-anim-2 0.7s -.8s infinite linear alternate;
+        }
+        .glitch__layer:nth-child(3) {
+            transform: translateX(5%);
+            animation: glitch-anim-flash 0.7s infinite linear;
+        }
+        @keyframes glitch-anim-1 {
+            0% { clip-path: polygon(0 0%, 100% 0%, 100% 5%, 0 5%); }
+            100% { clip-path: polygon(0 60%, 100% 60%, 100% 70%, 0 70%); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip-path: polygon(0 15%, 100% 15%, 100% 30%, 0 30%); }
+            100% { clip-path: polygon(0 11%, 100% 11%, 100% 15%, 0 15%); }
+        }
+        @keyframes glitch-anim-flash {
+            0% { opacity: .2; }
+            30%, 100% { opacity: 0; }
+        }
+        .frame-container {
+            position: absolute;
+            width: 100px;
+            height: 50px;
+            display: none;
+            transition: transform 12s linear;
+        }
+        .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.1s ease-in-out;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .tv-off {
+            animation: tv-off 0.2s linear forwards;
+        }
+        @keyframes tv-off {
+            0% { transform: scale(1, 1) translateY(0); }
+            60% { transform: scale(1, 0.001) translateY(0); }
+            100% { transform: scale(0, 0.001) translateY(50%); }
+        }
+        .fade-in {
+            animation: fade-in 2s forwards;
+        }
+        @keyframes fade-in {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        #image-container {
+            position: absolute;
+            width: 100%;
+            height: 12000px;  /* 전체 컨텐츠 높이에 맞게 조정 */
+            top: 200%;  /* 100%에서 200%로 변경 */
+            transition: none;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .media {
+            position: absolute;
+            transition: transform 0.4s;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .image {
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5); /* 그림자 설정 */
+            z-index: 2;
+            content-visibility: auto;
+            will-change: scroll-position; 
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        .image:hover {
+            transform: scale(2.0) rotate(0deg) translateZ(0) !important; /* 이미지 확대와 회전을 동시에 설정, important는 명시적 지정 */
+            z-index: 2;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .picture {
+            transform: rotate(0deg);
+            transform-origin: right center;
+            z-index: 1;
+            box-shadow: 0 0 0 12px white, 0 0 0 16px black; /* 여기에 추가 */
+            content-visibility: auto;
+        }
+        .center-image {
+            position: absolute;
+            width: 20%;
+            height: auto;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer; /* 클릭 가능한 커서로 변경 */
+            display: none;
+            pointer-events: auto; /* 클릭 가능하도록 설정 */
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="cassette-container" id="cassetteContainer">
+            <div class="cassette">
+                <div class="reel left"></div>
+                <div class="reel right"></div>
+            </div>
+            <div class="glitch__layers">
+                <div class="glitch__layer"></div>
+                <div class="glitch__layer"></div>
+                <div class="glitch__layer"></div>
+            </div>
+        </div>
+
+        <div class="frame-container">
+            <div id="gg1" class="frame" style="background-image: url('img/ㄱㄱ1.jpg');"></div>
+            <div id="gg2" class="frame" style="background-image: url('img/ㄱㄱ2.jpg');"></div>
+            <div id="gg3" class="frame" style="background-image: url('img/ㄱㄱ3.jpg');"></div>
+            <div id="frame1" class="frame" style="background-image: url('img/프레임1.JPG');"></div>
+            <div id="frame2" class="frame" style="background-image: url('img/프레임2.jpg');"></div>
+            <div id="frame3" class="frame" style="background-image: url('img/프레임3.jpg');"></div>
+            <div id="frame4" class="frame" style="background-image: url('img/프레임4.jpg');"></div>
+            <div id="frame5" class="frame" style="background-image: url('img/프레임5.jpg');"></div>
+        </div>
+
+        <div id="image-container">
+            <!--picture-->
+            <img src="images/picture1.webp" class="media picture" loading="lazy" decoding="async" style="left: 25%; top: 10%; width:70%; height: auto;">
+            <img src="images/picture2.webp" class="media picture" loading="lazy" decoding="async" style="left: 10%; top: 20%; width:70%; height: auto;">
+            <img src="images/picture3.webp" class="media picture" loading="lazy" decoding="async" style="left: 25%; top: 30%; width:70%; height: auto;">
+            <img src="images/picture4.webp" class="media picture" loading="lazy" decoding="async" style="left: 10%; top: 40%; width:70%; height: auto;">
+            <img src="images/picture5.webp" class="media picture" loading="lazy" decoding="async" style="left: 25%; top: 50%; width:70%; height: auto;">
+            <img src="images/picture6.webp" class="media picture" loading="lazy" decoding="async" style="left: 10%; top: 60%; width:70%; height: auto;">
+            <img src="images/picture7.webp" class="media picture" loading="lazy" decoding="async" style="left: 25%; top: 70%; width:70%; height: auto;">
+            <!--image-->
+            <img src="images/image1.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 2%; width: 20%; height: auto; transform: rotate(20deg); transform-origin: left center">
+            <img src="images/image2.webp" class="media image" loading="lazy" decoding="async" style="right: 10%; top: 5%; width: 19%; height: auto; transform: rotate(-18deg); transform-origin: right center">
+            <img src="images/image3.webp" class="media image" loading="lazy" decoding="async" style="left: 19%; top: 8%; width: 16%; height: auto; transform: rotate(10deg); transform-origin: left center">
+
+            <img src="images/image4.webp" class="media image" loading="lazy" decoding="async" style="left: 17%; top: 13%; width: 20%; height: auto; transform: rotate(35deg); transform-origin: left center">
+            <img src="images/image5.webp" class="media image" loading="lazy" decoding="async" style="right: 10%; top: 15%; width: 20%; height: auto; transform: rotate(-10deg); transform-origin: right center">
+            <img src="images/image6.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 18%; width: 22%; height: auto; transform: rotate(-7deg); transform-origin: left center">
+
+            <img src="images/image7.webp" class="media image" loading="lazy" decoding="async" style="right: 15%; top: 19%; width: 13%; height: auto; transform: rotate(0deg); transform-origin: right center">
+            <img src="images/image8.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 24%; width: 15%; height: auto; transform: rotate(5deg); transform-origin: left center">
+            <img src="images/image9.webp" class="media image" loading="lazy" decoding="async" style="right: 5%; top: 23%; width: 17%; height: auto; transform: rotate(-5deg); transform-origin: right center">
+            <!--2차 수정 완-->
+            <img src="images/image10.webp" class="media image" loading="lazy" decoding="async" style="left: 15%; top: 28%; width: 15%; height: auto; transform: rotate(20deg); transform-origin: left center">
+            <img src="images/image11.webp" class="media image" loading="lazy" decoding="async" style="right: 3%; top: 29%; width: 23%; height: auto; transform: rotate(-15deg); transform-origin: right center">
+            <img src="images/image12.webp" class="media image" loading="lazy" decoding="async" style="right: 2%; top: 34%; width: 25%; height: auto; transform: rotate(0deg); transform-origin: right center">
+
+            <img src="images/image13.webp" class="media image" loading="lazy" decoding="async" style="left: 7%; top: 34%; width: 19%; height: auto; transform: rotate(10deg); transform-origin: left center">
+            <img src="images/image14.webp" class="media image" loading="lazy" decoding="async" style="right: 10%; top: 39%; width: 23%; height: auto; transform: rotate(0deg); transform-origin: right center">
+            <img src="images/image15.webp" class="media image" loading="lazy" decoding="async" style="left: 15%; top: 43%; width: 23%; height: auto; transform: rotate(5deg); transform-origin: left center">
+            <!--2차 수정 완-->
+            <img src="images/image16.webp" class="media image" loading="lazy" decoding="async" style="left: 5%; top: 47%; width: 20%; height: auto; transform: rotate(0deg); transform-origin: left center">
+            <img src="images/image17.webp" class="media image" loading="lazy" decoding="async" style="right: 10%; top: 50%; width: 17%; height: auto; transform: rotate(-16deg); transform-origin: right center">
+            <!-- <img src="images/image18.webp" class="media image" style="right: 20%; top: 54%; width: 18%; height: auto; transform: rotate(-5deg); transform-origin: right center"> -->
+            <!--2차 수정 완-->
+            <img src="images/image19.webp" class="media image" loading="lazy" decoding="async" style="left: 2%; top: 55%; width: 20%; height: auto; transform: rotate(20deg); transform-origin: left center">
+            <!-- <img src="images/image20.webp" class="media image" style="left: 50%; top: 56%; width: 15%; height: auto; transform: rotate(0deg); transform-origin: right center"> -->
+            <img src="images/image21.webp" class="media image" loading="lazy" decoding="async" style="right: 1%; top: 58%; width: 20%; height: auto; transform: rotate(3deg); transform-origin: right center">
+            <!--2차 수정 완-->
+            <img src="images/image22.webp" class="media image" loading="lazy" decoding="async" style="left: 1%; top: 61%; width: 20%; height: auto; transform: rotate(-2deg); transform-origin: left center">
+            <img src="images/image23.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 67%; width: 16%; height: auto; transform: rotate(0deg); transform-origin: left center">
+            <img src="images/image24.webp" class="media image" loading="lazy" decoding="async" style="right: 5%; top: 69%; width: 25%; height: auto; transform: rotate(10deg); transform-origin: right center">
+
+            <img src="images/image25.webp" class="media image" loading="lazy" decoding="async" style="right: 3%; top: 73%; width: 20%; height: auto; transform: rotate(-3deg); transform-origin: right center">
+            <img src="images/image26.webp" class="media image" loading="lazy" decoding="async" style="left: 5%; top: 75%; width: 16%; height: auto; transform: rotate(10deg); transform-origin: left center">
+            <img src="images/image27.webp" class="media image" loading="lazy" decoding="async" style="right: 10%; top: 79%; width: 20%; height: auto; transform: rotate(10deg); transform-origin: right center"> 
+        </div>
+        <img src="images/button.png" class="center-image" id="centerImage">
+    </div>
+
+    <audio id="cdplAudio" src="music/cdpl.mp3"></audio>
+    <audio id="crazyAudio" src="music/Crazy.mp3"></audio>
+
+    <script>
+        const cassetteContainer = document.getElementById('cassetteContainer');
+        const glitchLayers = cassetteContainer.querySelector('.glitch__layers');
+        const reels = document.querySelectorAll('.reel');
+        const frameContainer = document.querySelector('.frame-container');
+        const frames = document.querySelectorAll('.frame');
+        const imageContainer = document.getElementById('image-container');
+        const centerImage = document.getElementById('centerImage');
+        let isAnimating = false;
+        let currentFrame = 0;
+
+        function showFrame(index) {
+            frames.forEach(frame => frame.style.opacity = '0');
+            frames[index].style.opacity = '1';
+        }
+
+        let animationStartTime;
+
+        function animate() {
+            if (!isAnimating) return;
+    
+            const currentTime = Date.now();
+            const elapsedTime = currentTime - animationStartTime;
+    
+            if (elapsedTime < 2500) {
+        // 첫 2.5초 동안 gg1~3 반복
+                currentFrame = currentFrame % 3;
+            } else {
+        // 2.5초 이후 프레임1~5 반복
+                currentFrame = 3 + ((currentFrame - 3) % 5);
+            }
+    
+    showFrame(currentFrame);
+    currentFrame++;
+    
+    setTimeout(animate, 130);
+}
+
+        function startScrolling() {
+            const totalHeight = imageContainer.offsetHeight - window.innerHeight;
+            const duration = 80000; // 80초 동안 스크롤 (필요에 따라 조정)
+            const startTime = Date.now();
+
+            function smoothScroll() {
+                const elapsedTime = Date.now() - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const scrollY = progress * totalHeight;
+                
+                // transition 대신 transform으로 직접 위치 조정
+                imageContainer.style.transform = `translateY(${-scrollY - window.innerHeight}px)`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(smoothScroll);
+                } else {
+                    setTimeout(showCenterImage, 0); // 스크롤이 끝난 후 2초 후 중앙 이미지 표시
+                }
+            }
+
+            requestAnimationFrame(smoothScroll);
+        }
+
+        function showCenterImage() {
+            centerImage.style.zIndex = '99'; // z-index 설정
+            centerImage.style.display = 'block';
+            centerImage.classList.add('fade-in');
+        }
+
+        cassetteContainer.addEventListener('click', () => {
+            document.getElementById('cdplAudio').play();
+            reels.forEach(reel => reel.style.animationPlayState = 'paused');
+            glitchLayers.style.display = 'block';
+
+            setTimeout(() => {
+                glitchLayers.style.display = 'none';
+                cassetteContainer.classList.add('tv-off');
+        
+                setTimeout(() => {
+                    cassetteContainer.style.display = 'none';
+            
+                    setTimeout(() => {
+                        frameContainer.style.display = 'block';
+                        isAnimating = true;
+                        currentFrame = 0;
+                        animationStartTime = Date.now();
+                        animate();
+
+                        document.getElementById('cdplAudio').onended = () => {
+                            document.getElementById('crazyAudio').play();
+                    
+                            setTimeout(() => {
+                                frameContainer.style.transform = 'translateY(-100vh)';
+                        
+                                setTimeout(() => {
+                                    imageContainer.style.transform = 'translateY(-200%)';  // 초기 위치 설정
+                                    startScrolling();
+                                }, 3000); // 3초 동안 흰 공백을 보여줍니다.
+                            }, 3000); // 스톱모션이 중앙에 머무는 시간
+                        };
+                    }, 5800);
+                }, 200);
+            }, 700);
+        });
+
+        showFrame(0);
+
+        // // Lazy Loading with Intersection Observer
+        // const images = document.querySelectorAll('img[loading="lazy"]');
+        // const options = {
+        //     root: null,
+        //     rootMargin: '0px',
+        //     threshold: 1.5
+        // };
+
+        // const observer = new IntersectionObserver((entries, observer) => {
+        //     entries.forEach(entry => {
+        //         if (entry.isIntersecting) {
+        //             const img = entry.target;
+        //             // console.log('Loading image:', img.src);
+        //             img.src = img.getAttribute('data-src');
+        //             observer.unobserve(img);
+        //         }
+        //     });
+        // }, options);
+
+        // images.forEach(image => {
+        //     observer.observe(image);
+        // });
+
+        // Add event listener to centerImage for TV off effect and redirect
+        centerImage.addEventListener('click', () => {
+            console.log('Center image clicked'); // 
+            setTimeout(() => {
+                window.location.href = 'cdp.html'; // 새로운 HTML 파일로 이동
+            }, 200); // TV off 애니메이션 시간에 맞춰 조정
+        });
+    </script>
+</body>
+</html>

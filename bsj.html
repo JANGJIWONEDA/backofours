@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>백승주</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center;    /* Center vertically */
+            height: 100vh;
+            background-color: #ffffff;
+            margin: 0;
+            position: relative;
+        }
+
+        .reel {
+            width: 830px;
+            height: 830px;
+            position: absolute;
+            left: 50%;
+            top: 480px;
+            transform: translate(-50%, -50%) rotate(0deg); /* Combine both translate and initial rotation */
+            background: url('cd/승주cd.png') no-repeat center center;
+            background-size: contain;
+            animation: spin 7s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg); /* Keep the initial transform */
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg); /* Spin with the center transformation */
+            }
+        }
+
+        .button-container {
+            position: absolute;
+            bottom: 0px; /* Adjust this value to move the button higher or lower */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .button-container img {
+            width: 30vw; /* Set the width of the button image to 30% of the viewport width */
+            height: auto;
+            cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .side-images {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .side-images a {
+            position: absolute;
+            cursor: pointer;
+        }
+
+        .side-images a img {
+            width: 100%; /* Make sure the images take up the full width of the link */
+            height: auto;
+        }
+
+        .image1 {
+            top: 20%; /* Adjust the position as needed */
+            left: 5%; /* Adjust the position as needed */
+            width: 20vw; /* Adjust the size as needed */
+            transform: rotate(-20deg);
+        }
+
+        .image2 {
+            top: 10%; /* Adjust the position as needed */
+            right: 10%; /* Adjust the position as needed */
+            width: 14vw; /* Adjust the size as needed */
+            transform: rotate(0deg);
+        }
+
+        .image3 {
+            bottom: 10%; /* Adjust the position as needed */
+            left: 10%; /* Adjust the position as needed */
+            width: 15vw; /* Adjust the size as needed */
+            transform: rotate(-5deg);
+        }
+
+        .image4 {
+            bottom: 10%; /* Adjust the position as needed */
+            right: 10%; /* Adjust the position as needed */
+            width: 10vw; /* Adjust the size as needed */
+        }
+    </style>
+</head>
+<body>
+    <div class="reel"></div>
+    <div class="side-images">
+        <a href="https://github.com/gnwsb/fourseasons" class="image1">
+            <img src="project/week1/승주,현호.png" alt="Image 1">
+        </a>
+        <a href="https://github.com/MunhwaSaenghwal" class="image2">
+            <img src="project/week2/승주,바다.png" alt="Image 2">
+        </a>
+        <a href="https://github.com/jaehee831/Madcamp-week3l" class="image3">
+            <img src="project/week3/승주,재희.png" alt="Image 3">
+        </a>
+        <!-- <a href="link4.html" class="image4">
+            <img src="images/image4.webp" alt="Image 4">
+        </a> -->
+    </div>
+    <div class="button-container">
+        <img id="toggleButton" src="back/승주.png" alt="Start Button">
+    </div>
+<script>
+    const toggleButton = document.getElementById('toggleButton');
+    
+    toggleButton.addEventListener('click', () => {
+        toggleButton.src = 'back/승주1.png';
+    
+        setTimeout(() => {
+            toggleButton.src = 'back/승주.png';
+                
+                // 추가 지연 후 player로 돌아가거나 opening.html로 이동
+            setTimeout(() => {
+                if (window.parent !== window && typeof window.parent.backToPlayer === 'function') {
+                    window.parent.backToPlayer();
+                } else {
+                    window.location.href = 'player.html';
+                }
+            }, 100); // 0.5초 추가 지연, 필요에 따라 조정 가능
+        }, 100);
+    });
+</script>
+</body>
+</html>

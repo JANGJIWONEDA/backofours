@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ending</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #97F5FF; /* 배경 색상 변경 */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: black; /* 텍스트 색상 설정 */
+            font-family: Arial, sans-serif; /* 폰트 설정 */
+        }
+        .main-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .frame-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            transition: transform 12s linear;
+        }
+        .frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        #image-container {
+            position: absolute;
+            width: 100%;
+            height: 12000px;  /* 전체 컨텐츠 높이에 맞게 조정 */
+            top: 200%;  /* 100%에서 200%로 변경 */
+            transition: none;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .media {
+            position: absolute;
+            transition: transform 0.4s;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .image {
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5); /* 그림자 설정 */
+            z-index: 2;
+            content-visibility: auto;
+            will-change: scroll-position; 
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        .image:hover {
+            transform: scale(1.5) rotate(0deg) translateZ(0) !important; /* 이미지 확대와 회전을 동시에 설정, important는 명시적 지정 */
+            z-index: 3;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .picture {
+            transform: rotate(0deg);
+            transform-origin: right center;
+            z-index: 1;
+            content-visibility: auto;
+        }
+        .video {
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5); /* 그림자 설정 */
+            width: 800px;
+            height: auto;
+            z-index: 2;
+            transform-origin: left center;
+            will-change: scroll-position; 
+            will-change: transform;
+        }
+        .video:hover {
+            transform: scale(1.5) rotate(0deg) translateZ(0) !important;;
+            will-change: scroll-position; 
+            will-change: transform;
+            z-index: 3;
+        }
+        @font-face {
+            font-family: 'font1';
+            src: url('font/font1.ttf') format('truetype'); /* format 값을 올바르게 설정 */
+        }
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'font1', sans-serif; /* font-family에서 중복 제거 및 대체 폰트 추가 */
+            font-size: 24px; /* 기본 폰트 크기 설정 */
+            color: #FFFFFF; /* 기본 텍스트 색상 설정 */
+            position: absolute;
+            top: 5%; /* 텍스트 상단 위치 설정 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%; /* 텍스트 너비 설정 */
+        }
+        .text-container p {
+            margin: 5px 0; /* 각 텍스트 항목 간격 설정 */
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div id="white-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: white; z-index: 1000;"></div>
+        <div id="stop-motion" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 999; display: none; background-color: white;">
+            <img id="stop-motion-img" src="" alt="Stop Motion" style="width: 10%; height: auto; object-fit: contain; position: absolute; left: 5%; top: 40%; transform: translateY(-50%);">
+        </div>
+        <div id="stop-motion-2" style="position: absolute; top: 0; right: 0; width: 100%; height: 100%; z-index: 999; display: none; background-color: white;">
+            <img id="stop-motion-img-2" src="" alt="Stop Motion 2" style="width: 10%; height: auto; object-fit: contain; position: absolute; right: 5%; top: 60%; transform: translateY(-50%);">
+        </div>
+        <div class="frame-container">
+            <div id="frame1" class="frame" style="background-image: url('img/outro1.png');"></div>
+            <div id="frame2" class="frame" style="background-image: url('img/outro2.png');"></div>
+            <div id="frame3" class="frame" style="background-image: url('img/outro3.png');"></div>
+            <div id="frame4" class="frame" style="background-image: url('img/outro4.png');"></div>
+            <div id="frame5" class="frame" style="background-image: url('img/outro5.png');"></div>
+            <div id="frame6" class="frame" style="background-image: url('img/outro6.png');"></div>
+            <div id="frame7" class="frame" style="background-image: url('img/outro7.png');"></div>
+            <div id="frame8" class="frame" style="background-image: url('img/outro8.png');"></div>
+        </div>
+        <div id="image-container">
+            <div class="text-container">
+                <p style="font-size: 35px; color: #FFFFFF;">출연</p>
+                <br>
+                <p style="font-size: 30px; color: #FFFFFF;">공진우</p>
+                <p style="font-size: 30px; color: #FFFFFF;">김동근</p>
+                <p style="font-size: 30px; color: #FFFFFF;">김진영</p>
+                <p style="font-size: 30px; color: #FFFFFF;">김문정</p>
+                <p style="font-size: 30px; color: #FFFFFF;">김민영</p>
+                <p style="font-size: 30px; color: #FFFFFF;">문재혁</p>
+                <p style="font-size: 30px; color: #FFFFFF;">백승주</p>
+                <p style="font-size: 30px; color: #FFFFFF;">오세연</p>
+                <p style="font-size: 30px; color: #FFFFFF;">송종찬</p>
+                <p style="font-size: 30px; color: #FFFFFF;">이동건</p>
+                <p style="font-size: 30px; color: #FFFFFF;">이은영</p>
+                <p style="font-size: 30px; color: #FFFFFF;">이은재</p>
+                <p style="font-size: 30px; color: #FFFFFF;">이재희</p>
+                <p style="font-size: 30px; color: #FFFFFF;">이현호</p>
+                <p style="font-size: 30px; color: #FFFFFF;">임지민</p>
+                <p style="font-size: 30px; color: #FFFFFF;">장지원</p>
+                <p style="font-size: 30px; color: #FFFFFF;">조민주</p>
+                <p style="font-size: 30px; color: #FFFFFF;">최정민</p>
+                <p style="font-size: 30px; color: #FFFFFF;">하도현</p>
+                <p style="font-size: 30px; color: #FFFFFF;">홍바다</p>
+                <p style="font-size: 30px; color: #FFFFFF;">하준학</p>
+                <br>
+                <br>
+                <p style="font-size: 35px; color: #FFFFFF;">제작</p>
+                <br>
+                <p style="font-size: 30px; color: #FFFFFF;">장지원</p>
+                <p style="font-size: 30px; color: #FFFFFF;">백승주</p>
+            </div>
+            <img src="outro_images/image1.webp" class="media image" loading="lazy" decoding="async" style="right: 10%; top: 6%; width: 18%; height: auto; transform: rotate(-10deg); transform-origin: right center">
+            <img src="outro_images/image2.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 7%; width: 15%; height: auto; transform: rotate(7deg); transform-origin: left center">
+            
+            <img src="outro_images/image3.webp" class="media image" loading="lazy" decoding="async" style="right: 9%; top: 12%; width: 18%; height: auto; transform: rotate(6deg); transform-origin: right center">
+            <img src="outro_images/image4.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 13%; width: 16%; height: auto; transform: rotate(-8deg); transform-origin: left center">
+            
+            <img src="outro_images/image5.webp" class="media image" loading="lazy" decoding="async" style="right: 9%; top: 15%; width: 19%; height: auto; transform: rotate(-8deg); transform-origin: right center">
+            <img src="outro_images/image6.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 17%; width: 17%; height: auto; transform: rotate(10deg); transform-origin: left center">
+
+            <img src="outro_images/image7.webp" class="media image" loading="lazy" decoding="async" style="right:10%; top: 20%; width: 18%; height: auto; transform: rotate(10deg); transform-origin: right center">
+            <img src="outro_images/image8.webp" class="media image" loading="lazy" decoding="async" style="left: 10%; top: 23%; width: 17%; height: auto; transform: rotate(-9deg); transform-origin: left center">
+
+            <img src="outro_images/image9.webp" class="media image" loading="lazy" decoding="async" style="right:8%; top: 24%; width: 18%; height: auto; transform: rotate(-10deg); transform-origin: right center">
+            <img src="outro_images/image10.webp" class="media image" loading="lazy" decoding="async" style="left: 7%; top: 28%; width: 17%; height: auto; transform: rotate(9deg); transform-origin: left center">
+
+            <img src="outro_images/image11.webp" class="media image" loading="lazy" decoding="async" style="right:9%; top: 30%; width: 18%; height: auto; transform: rotate(8deg); transform-origin: right center">
+            <video src="outro_images/image12.mp4" class="media video" loading="lazy" decoding="async" style="left: 10%; top: 34%; width: 17%; height: auto; transform: rotate(-7deg); transform-origin: left center"></video>
+
+            <video src="outro_images/image13.mp4" class="media video" loading="lazy" decoding="async" style="right:10%; top: 34%; width: 25%; height: auto; transform: rotate(-10deg); transform-origin: right center"></video>
+            <img src="outro_images/image14.webp" class="media image" loading="lazy" decoding="async" style="left: 8%; top: 40%; width: 17%; height: auto; transform: rotate(8deg); transform-origin: left center">
+            <!-- 2차 수정 완!-->
+
+            <img src="outro_images/image15.webp" class="media image" loading="lazy" decoding="async" style="right:8%; top: 38%; width: 18%; height: auto; transform: rotate(4deg); transform-origin: right center">
+            <video src="outro_images/image16.mp4" class="media video" loading="lazy" decoding="async" style="left: 40%; top: 42%; width: 14%; height: auto; transform: rotate(3deg); transform-origin: center"></video>
+
+            <img src="outro_images/image17.webp" class="media image" loading="lazy" decoding="async" style="left:8%; top: 45%; width: 18%; height: auto; transform: rotate(-10deg); transform-origin: left center">
+            <video src="outro_images/image18.mp4" class="media video" loading="lazy" decoding="async" style="right: 10%; top: 45%; width: 15%; height: auto; transform: rotate(-7deg); transform-origin: right center"></video>
+            <!-- 2차 수정 완!-->
+
+            <img src="outro_images/image19.webp" class="media image" loading="lazy" decoding="async" style="left:40%; top: 47%; width: 18%; height: auto; transform: rotate(15deg); transform-origin: left center">
+
+            <img src="outro_images/image20.webp" class="media image" loading="lazy" decoding="async" style="left:8%; top: 52%; width: 18%; height: auto; transform: rotate(-10deg); transform-origin: left center">
+            <img src="outro_images/image21.webp" class="media image" loading="lazy" decoding="async" style="right: 7%; top: 51%; width: 17%; height: auto; transform: rotate(9deg); transform-origin: right center">
+            
+            <img src="outro_images/image22.webp" class="media image" loading="lazy" decoding="async" style="left:40%; top: 53%; width: 18%; height: auto; transform: rotate(5deg); transform-origin: left center">
+
+            <img src="outro_images/image23.webp" class="media image" loading="lazy" decoding="async" style="left:8%; top: 58%; width: 18%; height: auto; transform: rotate(-10deg); transform-origin: left center">
+            <img src="outro_images/image24.webp" class="media image" loading="lazy" decoding="async" style="right: 7%; top: 59%; width: 17%; height: auto; transform: rotate(9deg); transform-origin: right center">
+
+            <img src="outro_images/image25.webp" class="media image" loading="lazy" decoding="async" style="left:40%; top: 59%; width: 18%; height: auto; transform: rotate(-10deg); transform-origin: left center">
+
+            <!--마지막 컷!-->
+            <img src="outro_images/image26.png" class="media picture" loading="lazy" decoding="async" style="left: 0%; top: 73%; width: 100%; height: auto";>
+        </div>
+    </div>
+
+    <audio id="openAudio" src="music/open.mp3"></audio>
+
+    <script>
+        const whiteScreen = document.getElementById('white-screen');
+        const frameContainer = document.querySelector('.frame-container');
+        const frames = document.querySelectorAll('.frame');
+        const imageContainer = document.getElementById('image-container');
+        const audio = document.getElementById('openAudio');
+        const stopMotion = document.getElementById('stop-motion');
+        const stopMotionImg = document.getElementById('stop-motion-img');
+        const stopMotion2 = document.getElementById('stop-motion-2');
+        const stopMotionImg2 = document.getElementById('stop-motion-img-2');
+        let isAnimating = false;
+        let currentFrame = 0;
+        let startTime = 0;
+    
+        const frameTimes = [
+            11.605, 11.814, 11.979, 12.165, 12.357, 12.542, 12.736, 12.921
+        ];
+    
+        function showFrame(index) {
+            frames.forEach(frame => frame.style.opacity = '0');
+            frames[index].style.opacity = '1';
+        }
+    
+        function animate() {
+            const elapsed = audio.currentTime;
+            
+            if (elapsed < 3.4) {
+                whiteScreen.style.display = 'block';
+                frameContainer.style.display = 'none';
+                stopMotion.style.display = 'none';
+                stopMotion2.style.display = 'none';
+            } else if (elapsed >= 3.4 && elapsed < 6.2) {
+                whiteScreen.style.display = 'none';
+                frameContainer.style.display = 'none';
+                stopMotion.style.display = 'block';
+                stopMotion2.style.display = 'none';
+                
+                const frameIndex = Math.floor((elapsed - 3.4) / 0.4) % 2;
+                stopMotionImg.src = `img/ㅍ${frameIndex + 1}.jpg`;
+            } else if (elapsed >= 6.2 && elapsed < 7.4) {
+                whiteScreen.style.display = 'none';
+                frameContainer.style.display = 'none';
+                stopMotion.style.display = 'block';
+                stopMotion2.style.display = 'block';
+                
+                const frameIndex1 = Math.floor((elapsed - 3.4) / 0.4) % 2;
+                stopMotionImg.src = `img/ㅍ${frameIndex1 + 1}.jpg`;
+                
+                const frameIndex2 = Math.floor((elapsed - 6.2) / 0.4) % 2;
+                stopMotionImg2.src = `img/ㅍ${frameIndex2 + 3}.jpg`;
+            } else if (elapsed >= 7.4 && elapsed < 11.605) {
+                whiteScreen.style.display = 'block';
+                frameContainer.style.display = 'none';
+                stopMotion.style.display = 'none';
+                stopMotion2.style.display = 'none';
+            } else {
+                whiteScreen.style.display = 'none';
+                frameContainer.style.display = 'block';
+                stopMotion.style.display = 'none';
+                stopMotion2.style.display = 'none';
+                
+                frameTimes.forEach((time, index) => {
+                    if (elapsed >= time && elapsed < time + 0.05) {
+                        showFrame(index);
+                    }
+                });
+            }
+    
+            if (elapsed < frameTimes[frameTimes.length - 1] + 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+    
+        function startScrolling() {
+            const totalHeight = imageContainer.offsetHeight - window.innerHeight;
+            const duration = 100000;
+            const scrollStartTime = Date.now();
+    
+            function smoothScroll() {
+                const elapsedTime = Date.now() - scrollStartTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const scrollY = progress * totalHeight;
+    
+                imageContainer.style.transform = `translateY(${-scrollY - window.innerHeight}px)`;
+    
+                if (progress < 1) {
+                    requestAnimationFrame(smoothScroll);
+                }
+            }
+    
+            requestAnimationFrame(smoothScroll);
+        }
+    
+        function startSequence() {
+            frameContainer.style.display = 'block';
+            isAnimating = true;
+            startTime = audio.currentTime;
+            requestAnimationFrame(animate);
+    
+            setTimeout(() => {
+                isAnimating = false;
+                setTimeout(() => {
+                    frameContainer.style.transform = 'translateY(-100vh)';
+                    setTimeout(() => {
+                        imageContainer.style.transform = 'translateY(-200%)';
+                        startScrolling();
+                    }, 0);
+                }, 6000);
+            }, (frameTimes[frameTimes.length - 1] + 1) * 1000);
+        }
+    
+        window.onload = () => {
+            audio.currentTime = 0;
+            audio.play();
+            startSequence();
+        }
+    
+        showFrame(1);
+    
+        document.querySelectorAll('.video').forEach(video => {
+            video.addEventListener('mouseover', () => {
+                video.play();
+            });
+            video.addEventListener('mouseout', () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+        });
+    
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 1.5
+        };
+    
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.getAttribute('data-src');
+                    observer.unobserve(img);
+                }
+            });
+        }, options);
+    
+        images.forEach(image => {
+            observer.observe(image);
+        });
+    </script>
+
+    </div>
+</body>
+</html>
